@@ -1,0 +1,19 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "outputDirectory": ".next",
+  "regions": ["iad1"],
+  "env": {
+    "SANITY_PROJECT_ID": "@sanity-project-id",
+    "SANITY_DATASET": "@sanity-dataset",
+    "SANITY_API_VERSION": "2024-01-01",
+    "SANITY_API_TOKEN": "@sanity-api-token",
+    "NEXT_PUBLIC_SANITY_PROJECT_ID": "@sanity-project-id",
+    "NEXT_PUBLIC_SANITY_DATASET": "@sanity-dataset",
+    "OPENAI_API_KEY": "@openai-api-key",
+    "AI_PROVIDER": "openai",
+    "AI_MODEL": "gpt-4o"
+  }
+}
