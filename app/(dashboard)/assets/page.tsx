@@ -37,7 +37,6 @@ export default async function AssetsPage() {
           <Server size={16} className="text-blue-400" />
           <h1 className="text-base font-semibold text-slate-100">Security Assets</h1>
           <span className="ml-2 text-xs text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">{assets.length}</span>
-          <span className="ml-2 text-xs text-yellow-600 bg-yellow-950/50 border border-yellow-900/30 px-2 py-0.5 rounded">ACME Corp · Synthetic</span>
         </div>
       </div>
       <div className="p-6">

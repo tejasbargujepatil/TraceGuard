@@ -28,11 +28,11 @@ export default function InvestigationsPage() {
             analysis pipeline.
           </div>
           <div className="mt-6 p-3 rounded-lg bg-blue-950/30 border border-blue-900/30 text-xs text-blue-400 max-w-sm mx-auto">
-            💡 Try{' '}
-            <a href="/findings/F001" className="underline font-medium">
-              F001 — S3 Bucket Publicly Accessible
+            💡 Go to{' '}
+            <a href="/findings" className="underline font-medium">
+              Findings
             </a>{' '}
-            for the primary demo scenario.
+            and click <strong>Investigate</strong> on any finding to start an AI investigation.
           </div>
         </div>
       </div>

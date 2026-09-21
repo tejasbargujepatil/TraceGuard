@@ -84,10 +84,8 @@ export function Sidebar() {
           Sanity Studio
           <LogOut size={11} className="ml-auto" />
         </Link>
-        <div className="px-2 py-1.5 rounded text-[10px] text-center text-yellow-600 bg-yellow-950/40 border border-yellow-900/30 leading-tight">
-          ⚠ Synthetic Environment
-          <br />
-          <span className="text-yellow-700">Demo Purposes Only</span>
+        <div className="px-2 py-1.5 rounded text-[10px] text-center text-slate-600 leading-tight">
+          TraceGuard v0.1.0
         </div>
       </div>
     </aside>

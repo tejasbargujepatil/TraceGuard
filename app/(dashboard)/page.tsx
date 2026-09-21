@@ -83,10 +83,7 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-base font-semibold text-slate-100">Security Posture</h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              ACME Corporation · Synthetic Cloud Environment
-              <span className="ml-2 px-1.5 py-0.5 rounded bg-yellow-950/50 border border-yellow-900/30 text-yellow-600 text-[10px]">
-                Demo Only
-              </span>
+              Real-time findings from your connected cloud accounts
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -205,9 +202,9 @@ export default function DashboardPage() {
         {!loading && !error && findings.length === 0 && (
           <div style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }} className="rounded-lg border p-12 text-center">
             <div className="text-4xl mb-3">🔒</div>
-            <div className="text-sm text-slate-400 mb-2">No findings found</div>
+            <div className="text-sm text-slate-400 mb-2">No findings yet</div>
             <div className="text-xs text-slate-600">
-              Run <code className="font-mono bg-slate-800 px-1 rounded">npm run seed</code> to load the ACME Corp demo dataset
+              Go to <a href="/accounts" className="text-blue-400 hover:underline">Cloud Accounts</a> to connect an AWS or GCP account and run your first scan.
             </div>
           </div>
         )}

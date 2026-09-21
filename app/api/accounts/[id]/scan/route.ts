@@ -4,9 +4,9 @@ import { decryptCredentials, loadEnvAWSCredentials, loadEnvGCPCredentials } from
 import { runServiceScan } from '@/lib/scanners/engine';
 import { ScanJob, CloudCredentials } from '@/lib/scanners/types';
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = params.id;
+    const { id } = await params;
     const body = await req.json();
     const { service } = body;
 
