@@ -20,7 +20,7 @@ export const finding = defineType({
       name: 'findingId',
       title: 'Finding ID',
       type: 'string',
-      description: 'e.g. F001, F002',
+      description: 'e.g. F001, s3-public-access::my-bucket',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -51,15 +51,16 @@ export const finding = defineType({
           { title: 'Encryption', value: 'encryption' },
           { title: 'Configuration Drift', value: 'drift' },
           { title: 'Compliance', value: 'compliance' },
+          { title: 'SecurityHub', value: 'securityhub' },
         ],
       },
     }),
+    // Optional reference — manual findings link to a securityAsset; auto-detected scan findings do not
     defineField({
       name: 'affectedAsset',
       title: 'Affected Asset',
       type: 'reference',
       to: [{ type: 'securityAsset' }],
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'observedCondition',
@@ -110,11 +111,28 @@ export const finding = defineType({
       },
       initialValue: 'open',
     }),
-    defineField({
-      name: 'discoveredAt',
-      title: 'Discovered At',
-      type: 'datetime',
-    }),
+    defineField({ name: 'discoveredAt', title: 'Discovered At', type: 'datetime' }),
+
+    // ── Cloud scan metadata (populated by the scanner engine) ──────────────
+    defineField({ name: 'cloudProvider', title: 'Cloud Provider', type: 'string', options: { list: ['aws', 'gcp'] } }),
+    defineField({ name: 'cloudAccountId', title: 'Cloud Account Sanity ID', type: 'string' }),
+    defineField({ name: 'resourceId', title: 'Resource ID', type: 'string' }),
+    defineField({ name: 'resourceArn', title: 'Resource ARN / Full ID', type: 'string' }),
+    defineField({ name: 'resourceName', title: 'Resource Name', type: 'string' }),
+    defineField({ name: 'region', title: 'Region', type: 'string' }),
+    defineField({ name: 'service', title: 'Service', type: 'string' }),
+    defineField({ name: 'compliance', title: 'Compliance Frameworks', type: 'array', of: [{ type: 'string' }] }),
+    defineField({ name: 'mitre', title: 'MITRE ATT&CK Techniques', type: 'array', of: [{ type: 'string' }] }),
+    defineField({ name: 'remediationSummary', title: 'Remediation Summary', type: 'text', rows: 2 }),
+    defineField({ name: 'remediationSteps', title: 'Remediation Steps', type: 'array', of: [{ type: 'string' }] }),
+    defineField({ name: 'remediationAwsCli', title: 'AWS CLI Command', type: 'text', rows: 2 }),
+    defineField({ name: 'remediationGcpCli', title: 'GCP CLI Command', type: 'text', rows: 2 }),
+    defineField({ name: 'remediationTerraform', title: 'Terraform Snippet', type: 'text', rows: 3 }),
+    defineField({ name: 'remediationConsoleUrl', title: 'Console URL', type: 'url' }),
+    defineField({ name: 'remediationEffort', title: 'Estimated Effort', type: 'string', options: { list: ['minutes', 'hours', 'days'] } }),
+    defineField({ name: 'operationalImpact', title: 'Operational Impact', type: 'string', options: { list: ['none', 'low', 'medium', 'high'] } }),
+    defineField({ name: 'autoDetected', title: 'Auto Detected by Scanner', type: 'boolean', initialValue: false }),
+    defineField({ name: 'scanTimestamp', title: 'Scan Timestamp', type: 'datetime' }),
   ],
   preview: {
     select: {
@@ -136,3 +154,4 @@ export const finding = defineType({
     },
   },
 });
+

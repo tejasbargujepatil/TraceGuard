@@ -71,7 +71,7 @@ export default function FindingsPage() {
               <FindingCard
                 key={f._id}
                 finding={f}
-                onClick={() => router.push(`/findings/${f.findingId}`)}
+                onClick={() => router.push(`/findings/${encodeURIComponent(f.findingId)}`)}
               />
             ))}
             {filtered.length === 0 && (

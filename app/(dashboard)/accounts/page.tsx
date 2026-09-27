@@ -39,8 +39,14 @@ export default function AccountsPage() {
 
   function handleScanComplete(accountId: string, totalFindings: number) {
     setScanningAccountId(null);
-    setAccounts(prev => prev.map(a => a._id === accountId ? { ...a, status: 'connected', lastScannedAt: new Date().toISOString(), lastScanFindingCount: totalFindings } : a));
-    void fetchAccounts(); // refresh to get accurate counts
+    // Immediately update local state so card shows result without waiting for Sanity
+    setAccounts(prev => prev.map(a =>
+      a._id === accountId
+        ? { ...a, status: 'connected', lastScannedAt: new Date().toISOString(), lastScanFindingCount: totalFindings }
+        : a
+    ));
+    // Refresh from Sanity after a short delay to allow async write to propagate
+    setTimeout(() => void fetchAccounts(), 2500);
   }
 
   const scanningAccount = accounts.find(a => a._id === scanningAccountId);

@@ -204,7 +204,7 @@ export async function updateAccountScanStatus(
       }),
       ...(errorMessage && { errorMessage }),
     });
-    await patch.commit({ visibility: 'async' });
+    await patch.commit({ visibility: 'sync' });
   } catch (err) {
     console.error('[Engine] Failed to update account status:', err);
   }

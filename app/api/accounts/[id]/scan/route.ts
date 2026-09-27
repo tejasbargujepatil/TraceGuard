@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import { sanityClient } from '@/lib/sanity/client';
 import { decryptCredentials, loadEnvAWSCredentials, loadEnvGCPCredentials } from '@/lib/scanners/credentials';
-import { runServiceScan } from '@/lib/scanners/engine';
+import { runServiceScan, updateAccountScanStatus } from '@/lib/scanners/engine';
 import { ScanJob, CloudCredentials } from '@/lib/scanners/types';
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const body = await req.json();
-    const { service } = body;
+    const { service, isFirst, isFinal, runningTotal } = body;
 
     if (!service) {
       return NextResponse.json({ error: 'Service is required' }, { status: 400 });
@@ -17,6 +17,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const account = await sanityClient.fetch(`*[_type == 'cloudAccount' && _id == $id][0]`, { id });
     if (!account) {
       return NextResponse.json({ error: 'Account not found' }, { status: 404 });
+    }
+
+    // Mark account as scanning on the first service call
+    if (isFirst) {
+      await updateAccountScanStatus(id, 'scanning');
     }
 
     let credentials: CloudCredentials;
@@ -49,8 +54,26 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     const result = await runServiceScan(job, service);
 
+    // On the final service, update account status with totals
+    if (isFinal) {
+      const totalFindings = (runningTotal ?? 0) + result.findingCount;
+      // Count critical/high from result findings
+      const critical = result.findings.filter((f) => f.severity === 'critical').length;
+      const high = result.findings.filter((f) => f.severity === 'high').length;
+      await updateAccountScanStatus(id, 'connected', {
+        total: totalFindings,
+        critical,
+        high,
+      });
+    }
+
     return NextResponse.json(result);
   } catch (error) {
+    // On error, revert account status back to connected
+    try {
+      const { id } = await params;
+      await updateAccountScanStatus(id, 'error', undefined, (error as Error).message);
+    } catch { /* best effort */ }
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

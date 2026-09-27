@@ -91,12 +91,15 @@ export function ScanProgress({ accountId, provider, accountName, onComplete, onC
           break;
         }
         const svc = services[i];
+        const isFirst = i === 0;
+        const isFinal = i === services.length - 1;
+        const runningTotal = collectedResults.reduce((sum, r) => sum + r.findingCount, 0);
         setServiceStates(prev => prev.map(s => s.key === svc.key ? { ...s, status: 'running' } : s));
         try {
           const res = await fetch(`/api/accounts/${accountId}/scan`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ service: svc.key }),
+            body: JSON.stringify({ service: svc.key, isFirst, isFinal, runningTotal }),
           });
           const data = await res.json() as ServiceScanResult;
           collectedResults.push(data);
